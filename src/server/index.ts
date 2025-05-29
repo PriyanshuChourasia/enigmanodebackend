@@ -12,18 +12,21 @@ export function initializeApp(app:Express){
     const server = http.createServer(app);
     const io = new Server(server,{
         cors:{
-            origin: 'http://localhost:5714',
+            origin: '*',
             methods: ['GET',"POST"]
         }
     });
 
     io.on('connection',(socket)=>{
+        // console.log('A user connected: ',socket.data);
         console.log('A user connected: ',socket.id);
+        console.log('A user connected: ',socket.conn);
+
 
         
-        
         socket.on('sendMessage',(message)=>{
-            io.emit('receive Message', message);
+            console.log("message",message);
+            io.emit("responseMessage","This is me");
         });
 
         socket.on('disconnect',()=>{
@@ -34,4 +37,18 @@ export function initializeApp(app:Express){
     server.listen(port,()=>{
         console.log(`Server listening at port ${port}`);
     });
-}
+};
+
+
+
+/**
+ * event name: sendMessage;
+ * event name: receivedMessage;
+ * userId:1234
+ * userId:1235
+ * const messageObject = {
+ *  userId: 1234
+ * }
+ * 
+ * 
+ */
